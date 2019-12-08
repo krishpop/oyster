@@ -15,7 +15,7 @@ from rlkit.torch.sac.policies import TanhGaussianPolicy
 from rlkit.torch.networks import FlattenMlp, MlpEncoder, RecurrentEncoder
 from rlkit.torch.sac.sac import PEARLSoftActorCritic
 from rlkit.torch.sac.agent import PEARLAgent
-from rlkit.launchers.launcher_util import setup_logger
+from rlkit.launchers.launcher_util import setup_logger, run_experiment_here
 import rlkit.torch.pytorch_util as ptu
 from configs.default import default_config
 
@@ -126,7 +126,9 @@ def deep_update_dict(fr, to):
 @click.option('--gpu', default=0)
 @click.option('--docker', is_flag=True, default=False)
 @click.option('--debug', is_flag=True, default=False)
-def main(config, gpu, docker, debug):
+@click.option("--exp_id", default=1, help="experiment id")
+@click.option("--seed", default=1, help="seed")
+def main(config, gpu, docker, debug, exp_id, seed):
 
     variant = default_config
     if config:
@@ -135,7 +137,8 @@ def main(config, gpu, docker, debug):
         variant = deep_update_dict(exp_params, variant)
     variant['util_params']['gpu_id'] = gpu
 
-    experiment(variant)
+    # experiment(variant)
+    run_experiment_here(experiment, variant=variant, exp_id=exp_id, seed=seed)
 
 if __name__ == "__main__":
     main()
