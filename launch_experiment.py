@@ -9,6 +9,7 @@ import click
 import json
 import torch
 
+from nacre.envs import point_mass
 from rlkit.envs import ENVS
 from rlkit.envs.wrappers import NormalizedBoxEnv
 from rlkit.torch.sac.policies import TanhGaussianPolicy
@@ -126,7 +127,7 @@ def deep_update_dict(fr, to):
 @click.option('--gpu', default=0)
 @click.option('--docker', is_flag=True, default=False)
 @click.option('--debug', is_flag=True, default=False)
-@click.option("--exp_id", default=1, help="experiment id")
+@click.option("--exp_id", default='baseline', help="experiment id")
 @click.option("--seed", default=1, help="seed")
 def main(config, gpu, docker, debug, exp_id, seed):
 

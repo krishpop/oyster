@@ -138,6 +138,8 @@ def run_experiment_here(
     if seed is None and 'seed' not in variant:
         seed = random.randint(0, 100000)
         variant['seed'] = str(seed)
+    elif seed is not None:
+        variant['seed'] = str(seed)
     reset_execution_environment()
 
     actual_log_dir = setup_logger(
@@ -211,7 +213,9 @@ def create_log_dir(exp_prefix, exp_id=None, seed=0, base_log_dir=None):
     exp_name = exp_id
     if exp_name is None:
         exp_name = create_simple_exp_name()
-    log_dir = osp.join(base_log_dir, exp_prefix.replace("_", "-"), exp_name)
+    else:
+        exp_name = str(exp_id)
+    log_dir = osp.join(base_log_dir, exp_prefix.replace("_", "-"), exp_name, str(seed))
     os.makedirs(log_dir, exist_ok=True)
     return log_dir
 
