@@ -9,11 +9,7 @@ import click
 import json
 import torch
 
-try:
-    from nacre.envs import point_mass
-except ImportError:
-    pass
-
+from nacre.envs import point_mass
 from rlkit.envs import ENVS
 from rlkit.envs.wrappers import NormalizedBoxEnv
 from rlkit.torch.sac.policies import TanhGaussianPolicy

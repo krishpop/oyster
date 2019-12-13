@@ -138,6 +138,8 @@ def run_experiment_here(
     if seed is None and 'seed' not in variant:
         seed = random.randint(0, 100000)
         variant['seed'] = str(seed)
+    elif seed is not None:
+        variant['seed'] = str(seed)
     reset_execution_environment()
 
     actual_log_dir = setup_logger(
