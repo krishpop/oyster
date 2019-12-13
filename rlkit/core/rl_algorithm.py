@@ -216,6 +216,8 @@ class MetaRLAlgorithm(metaclass=abc.ABCMeta):
 
         num_transitions = 0
         num_ep_succ = num_ep_fail = num_eps = 0
+        if self.eval_statistics is None:
+            self.eval_statistics = OrderedDict()
         while num_transitions < num_samples:
             paths, n_samples = self.sampler.obtain_samples(max_samples=num_samples - num_transitions,
                                                                 max_trajs=update_posterior_rate,
@@ -229,9 +231,9 @@ class MetaRLAlgorithm(metaclass=abc.ABCMeta):
                 context = self.sample_context(self.task_idx)
                 self.agent.infer_posterior(context)
             terms = np.concatenate([p['terminals'] for p in paths])
-            task_agn_rew = np.concatenate([info['task_agn_rew'] for p in paths for info in p['env_infos']])
-            num_ep_succ += np.sum(task_agn_rew[np.where(terms)] == 0.)
-            num_ep_fail += np.sum(task_agn_rew[np.where(terms)] == 1.)
+            task_agn_rew = np.array([info['task_agn_rew'] for p in paths for info in p['env_infos']])
+            num_ep_succ += np.sum(task_agn_rew[np.where(terms)[0]] == 0.)
+            num_ep_fail += np.sum(task_agn_rew[np.where(terms)[0]] == 1.)
             num_eps += np.sum(terms)
         self.eval_statistics['Episode Success Rate'] = num_ep_succ / num_eps
         self.eval_statistics['Episode Failure Rate'] = num_ep_fail / num_eps
